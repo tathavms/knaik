@@ -10,10 +10,12 @@ import pickle
 model = tf.keras.models.load_model('annclassification/model.h5') #uncomment while deploying from git
 
 # Load the encoders and scaler
-with open('label_encoder_gender.pkl', 'rb') as file:
+# with open('label_encoder_gender.pkl', 'rb') as file: #uncomment while running in local
+with open('annclassification/label_encoder_gender.pkl', 'rb') as file: #uncomment while deploying from git
     label_encoder_gender = pickle.load(file)
 
-with open('onehot_encoder_geo.pkl', 'rb') as file:
+# with open('onehot_encoder_geo.pkl', 'rb') as file: #uncomment while running in local
+with open('annclassification/onehot_encoder_geo.pkl', 'rb') as file: #uncomment while deploying from git
     onehot_encoder_geo = pickle.load(file)
 
 with open('scaler.pkl', 'rb') as file:
