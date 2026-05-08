@@ -18,7 +18,8 @@ with open('annclassification/label_encoder_gender.pkl', 'rb') as file: #uncommen
 with open('annclassification/onehot_encoder_geo.pkl', 'rb') as file: #uncomment while deploying from git
     onehot_encoder_geo = pickle.load(file)
 
-with open('scaler.pkl', 'rb') as file:
+# with open('scaler.pkl', 'rb') as file: #uncomment while running in local
+with open('scaler.pkl', 'rb') as file: #uncomment while deploying from git
     scaler = pickle.load(file)
 
 
