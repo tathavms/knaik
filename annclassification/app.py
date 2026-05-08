@@ -4,22 +4,26 @@ import tensorflow as tf
 from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
 import pandas as pd
 import pickle
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent
 
 # Load the trained model
 # model = tf.keras.models.load_model('model.h5') #Uncomment while running in local
-model = tf.keras.models.load_model('annclassification/model.h5') #uncomment while deploying from git
+model = tf.keras.models.load_model(BASE_DIR/'model.h5') #uncomment while deploying from git
 
 # Load the encoders and scaler
 # with open('label_encoder_gender.pkl', 'rb') as file: #uncomment while running in local
-with open('annclassification/label_encoder_gender.pkl', 'rb') as file: #uncomment while deploying from git
+with open(BASE_DIR/'label_encoder_gender.pkl', 'rb') as file: #uncomment while deploying from git
     label_encoder_gender = pickle.load(file)
 
 # with open('onehot_encoder_geo.pkl', 'rb') as file: #uncomment while running in local
-with open('annclassification/onehot_encoder_geo.pkl', 'rb') as file: #uncomment while deploying from git
+with open(BASE_DIR/'onehot_encoder_geo.pkl', 'rb') as file: #uncomment while deploying from git
     onehot_encoder_geo = pickle.load(file)
 
 # with open('scaler.pkl', 'rb') as file: #uncomment while running in local
-with open('annclassification/scaler.pkl', 'rb') as file: #uncomment while deploying from git
+with open(BASE_DIR/'scaler.pkl', 'rb') as file: #uncomment while deploying from git
     scaler = pickle.load(file)
 
 
