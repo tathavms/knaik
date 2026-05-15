@@ -1,18 +1,76 @@
-name: Sync to Hugging Face hub
+name: Sync toy projects to Hugging Face Spaces
+
 on:
   push:
     branches: [main]
+    paths:
+      - 'annclassification/**'
+      # - 'simple_rnn_imdb/**'
+      # - 'lstm_rnn/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 jobs:
-  sync-to-hub:
+  changes:
     runs-on: ubuntu-latest
+    outputs:
+      annclassification: ${{ steps.filter.outputs.annclassification }}
+      # simple_rnn_imdb: ${{ steps.filter.outputs.simple_rnn_imdb }}
+      # lstm_rnn: ${{ steps.filter.outputs.lstm_rnn }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true
-      - name: Push to hub
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://tathacom:$HF_TOKEN@huggingface.co/spaces/tathacom/annclassification-knaik main
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            annclassification:
+              - 'annclassification/**'
+            # simple_rnn_imdb:
+            #   - 'simple_rnn_imdb/**'
+            # lstm_rnn:
+            #   - 'lstm_rnn/**'
+
+  sync-annclassification:
+    needs: changes
+    if: needs.changes.outputs.annclassification == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: huggingface/hub-sync@v0.1.0
+        with:
+          github_repo_id: ${{ github.repository }}
+          huggingface_repo_id: tathacom/annclassification-knaik
+          repo_type: space
+          subdirectory: annclassification
+          hf_token: ${{ secrets.HF_TOKEN }}
+
+  # sync-simple-rnn-imdb:
+  #   needs: changes
+  #   if: needs.changes.outputs.simple_rnn_imdb == 'true'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - uses: huggingface/hub-sync@v0.1.0
+  #       with:
+  #         github_repo_id: ${{ github.repository }}
+  #         huggingface_repo_id: tathacom/simple-rnn-imdb-knaik
+  #         repo_type: space
+  #         subdirectory: simple_rnn_imdb
+  #         hf_token: ${{ secrets.HF_TOKEN }}
+
+  # sync-lstm-rnn:
+  #   needs: changes
+  #   if: needs.changes.outputs.lstm_rnn == 'true'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - uses: huggingface/hub-sync@v0.1.0
+  #       with:
+  #         github_repo_id: ${{ github.repository }}
+  #         huggingface_repo_id: tathacom/lstm-rnn-knaik
+  #         repo_type: space
+  #         subdirectory: lstm_rnn
+  #         hf_token: ${{ secrets.HF_TOKEN }}
